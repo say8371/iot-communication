@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RtspClient extends RtspNetwork {
 
-    private boolean alive;
+    private volatile boolean alive;
 
     /**
      * 线程池执行服务，单线程

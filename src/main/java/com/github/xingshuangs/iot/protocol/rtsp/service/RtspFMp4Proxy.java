@@ -91,7 +91,7 @@ public class RtspFMp4Proxy {
     /**
      * 是否终止
      */
-    private boolean terminal = false;
+    private volatile boolean terminal = false;
 
     /**
      * MP4的头
