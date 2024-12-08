@@ -26,38 +26,48 @@ package com.github.xingshuangs.iot.protocol.mp4.model;
 
 
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
+import lombok.Data;
 
 /**
+ * Mp4 sample data.
+ *
  * @author xingshuang
  */
+@Data
 public class Mp4SampleData {
 
     /**
-     * 时间
+     * DTS
      */
-    private long timestamp = 0;
+    private long dts = 0;
 
     /**
-     * 数据，帧数据+长度
+     * nalu length + nalu data.
+     * （数据，帧数据+长度）
      */
     private byte[] data;
 
     /**
+     * Data size.
      * 数据大小，表示sample对应的数据帧的实际大小size=224251，帧数据字节+长度字节
      */
     private int size = 0;
 
     /**
+     * Duration.
      * 持续时间，一个sample的持续时间duration=3600
      */
     private int duration = 3600;
 
     /**
+     * CTS = PTS - DTS
      * 时间, cts一般取值为0
      */
     private int cts = 0;
 
     /**
+     * Identifier bit information, representing sample-flags, DependsOn=2 and other = 0 if a keyframe is touched,
+     * DependsOn=1 for non-keyframes, IsNonSync =1 and other = 0.
      * 标识位信息，表示sample-flags，只要碰到关键帧，DependsOn=2 ，其他等于0，非关键帧DependsOn=1，IsNonSync等于1，其他等于0
      * (sample.IsLeading << 2) | sample.DependsOn,
      * (sample.IsDependedOn << 6) | (sample.HasRedundancy << 4) | (0x00 << 1) | sample.IsNonSync,
@@ -72,45 +82,5 @@ public class Mp4SampleData {
         buff.putInteger(data.length)
                 .putBytes(data);
         this.data = buff.getData();
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setFlags(Mp4SampleFlag flags) {
-        this.flags = flags;
-    }
-
-    public Mp4SampleFlag getFlags() {
-        return flags;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public int getCts() {
-        return cts;
-    }
-
-    public void setCts(int cts) {
-        this.cts = cts;
     }
 }

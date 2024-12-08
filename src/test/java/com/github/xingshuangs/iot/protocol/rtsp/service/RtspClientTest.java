@@ -44,6 +44,42 @@ import java.util.concurrent.TimeUnit;
 public class RtspClientTest {
 
     @Test
+    public void connectUdp1() {
+        List<H264VideoFrame> list = new ArrayList<>();
+        URI uri = URI.create("rtsp://192.168.3.250:554/h264/ch1/main/av_stream");
+        UsernamePasswordCredential credential = new UsernamePasswordCredential("admin", "hb123456");
+        DigestAuthenticator authenticator = new DigestAuthenticator(credential);
+        RtspClient client = new RtspClient(uri, authenticator, ERtspTransportProtocol.UDP);
+//        client.onCommCallback(log::info);
+        client.onFrameHandle(x -> {
+            H264VideoFrame f = (H264VideoFrame) x;
+            if (f.getSliceType() != null) {
+                log.debug("{}, PTS: {}, DTS: {}, duration: {}, PTS-DTS={}, size: {}", f.getSliceType(), f.getPts(), f.getDts(), f.getDuration(), (f.getPts() - f.getDts()), f.getFrameSegment().length);
+            }
+            if (f.getDuration() <= 0) {
+                log.warn("存在一帧数据，duration <= 0");
+            }
+        });
+        client.onDestroyHandle(() -> log.debug("close"));
+        CompletableFuture.runAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            client.stop();
+        });
+        CompletableFuture<Void> future = client.start();
+        while (!future.isDone()) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Test
     public void connectUdp() {
         URI uri = URI.create("rtsp://192.168.3.142:554/h264/ch1/main/av_stream");
         UsernamePasswordCredential credential = new UsernamePasswordCredential("admin", "kilox1234");
@@ -83,7 +119,7 @@ public class RtspClientTest {
         client.onCommCallback(System.out::println);
         client.onFrameHandle(x -> {
             H264VideoFrame f = (H264VideoFrame) x;
-            log.debug(f.getFrameType() + ", " + f.getNaluType() + ", " + f.getTimestamp() + ", " + f.getFrameSegment().length);
+//            log.debug(f.getFrameType() + ", " + f.getNaluType() + ", " + f.getTimestamp() + ", " + f.getFrameSegment().length);
         });
         client.onDestroyHandle(() -> log.debug("close"));
         CompletableFuture.runAsync(() -> {
@@ -108,22 +144,17 @@ public class RtspClientTest {
     @Test
     public void connectUdpWithoutAuthenticator() {
         List<H264VideoFrame> list = new ArrayList<>();
+//        URI uri = URI.create("rtsp://192.168.3.15:8554/back");
         URI uri = URI.create("rtsp://127.0.0.1:8554/11");
         RtspClient client = new RtspClient(uri, ERtspTransportProtocol.UDP);
-        client.onCommCallback(log::info);
+//        client.onCommCallback(log::info);
         client.onFrameHandle(x -> {
             H264VideoFrame f = (H264VideoFrame) x;
-            list.add(f);
-            H264VideoFrame tmp = null;
-            if (list.size() >= 5) {
-                list.sort((a, b) -> (int) (a.getTimestamp() - b.getTimestamp()));
-                tmp = list.remove(0);
-//                log.debug(f.getTimestamp() + ", " + HexUtil.toHexString(new byte[]{f.getFrameSegment()[0]}) + tmp.getTimestamp() + ", " + HexUtil.toHexString(new byte[]{tmp.getFrameSegment()[0]}));
+            if (f.getSliceType() != null) {
+                log.debug("{}, PTS: {}, DTS: {}, duration: {}, PTS-DTS={}, size: {}", f.getSliceType(), f.getPts(), f.getDts(), f.getDuration(), (f.getPts() - f.getDts()), f.getFrameSegment().length);
             }
-            if (tmp == null) {
-                log.debug(f.getTimestamp() + ", " + HexUtil.toHexString(new byte[]{f.getFrameSegment()[0]}));
-            } else {
-                log.debug(f.getTimestamp() + ", " + HexUtil.toHexString(new byte[]{f.getFrameSegment()[0]}) + ", " + tmp.getTimestamp() + ", " + HexUtil.toHexString(new byte[]{tmp.getFrameSegment()[0]}));
+            if (f.getDuration() <= 0) {
+                log.warn("存在一帧数据，duration <= 0");
             }
         });
         client.onDestroyHandle(() -> log.debug("close"));

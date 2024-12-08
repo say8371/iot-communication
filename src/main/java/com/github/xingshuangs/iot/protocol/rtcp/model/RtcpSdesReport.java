@@ -28,6 +28,7 @@ package com.github.xingshuangs.iot.protocol.rtcp.model;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.rtcp.enums.ERtcpPackageType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ import java.util.List;
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public final class RtcpSdesReport extends RtcpBasePackage {
 
     private List<RtcpSdesChunk> sdesChunks = new ArrayList<>();
@@ -85,7 +87,7 @@ public final class RtcpSdesReport extends RtcpBasePackage {
         for (RtcpSdesChunk chunk : this.sdesChunks) {
             length += chunk.byteArrayLength();
         }
-        return length;
+        return (int) Math.ceil(length / 4.0) * 4;
     }
 
     @Override
@@ -101,9 +103,9 @@ public final class RtcpSdesReport extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static RtcpSdesReport fromBytes(final byte[] data) {
@@ -111,10 +113,10 @@ public final class RtcpSdesReport extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static RtcpSdesReport fromBytes(final byte[] data, final int offset) {

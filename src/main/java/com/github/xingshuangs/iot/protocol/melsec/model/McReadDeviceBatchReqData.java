@@ -27,19 +27,22 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
-import com.github.xingshuangs.iot.protocol.melsec.enums.EMcSeries;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 软元件访问批量读请求数据
+ * Device access request data, batch read.
+ * (软元件访问批量读请求数据)
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McReadDeviceBatchReqData extends McReqData {
 
     /**
-     * 软元件设备地址
+     * Device address.
+     * (软元件设备地址)
      */
     protected McDeviceAddress deviceAddress;
 

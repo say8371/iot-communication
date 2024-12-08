@@ -42,7 +42,8 @@ import static com.github.xingshuangs.iot.common.enums.EDataType.BOOL;
 import static com.github.xingshuangs.iot.common.enums.EDataType.STRING;
 
 /**
- * 字节数组序列化工具
+ * Tool of byte array serialize class.
+ * (字节数组序列化工具)
  *
  * @author xingshuang
  */
@@ -74,22 +75,24 @@ public class ByteArraySerializer implements IByteArraySerializable {
     }
 
     /**
-     * 转换为对象，提取参数数据
+     * To object and extract parameter.
+     * (转换为对象，提取参数数据)
      *
-     * @param parameter 参数
-     * @param src       字节数组数据
-     * @return 含值的参数
+     * @param parameter byte array parameter
+     * @param src       byte array source
+     * @return parameter with value
      */
     public ByteArrayParameter extractParameter(final ByteArrayParameter parameter, final byte[] src) {
         return this.extractParameter(Collections.singletonList(parameter), src).get(0);
     }
 
     /**
-     * 转换为list对象，提取参数数据
+     * To list, and extract parameter.
+     * (转换为list对象，提取参数数据)
      *
-     * @param parameters 参数列表
-     * @param src        字节数组数据
-     * @return 含值的list参数
+     * @param parameters list parameter.
+     * @param src        byte array data.
+     * @return list parameter with value.
      */
     public List<ByteArrayParameter> extractParameter(final List<ByteArrayParameter> parameters, final byte[] src) {
         try {
@@ -152,14 +155,15 @@ public class ByteArraySerializer implements IByteArraySerializable {
     }
 
     /**
-     * 提取数据
+     * Extract target data by condition.
+     * (提取数据)
      *
-     * @param src      数据内容，字节数组
-     * @param bean     对象
-     * @param field    字段
-     * @param variable 字节数组注解
-     * @param <T>      类型
-     * @throws IllegalAccessException 访问异常
+     * @param src      byte array
+     * @param bean     bean object
+     * @param field    field
+     * @param variable byte array parameter
+     * @param <T>      type
+     * @throws IllegalAccessException illegal access exception
      */
     private <T> void extractData(byte[] src, T bean, Field field, ByteArrayParameter variable) throws IllegalAccessException {
         ByteReadBuff buff = new ByteReadBuff(src, 0, variable.isLittleEndian(), variable.getFormat());
@@ -204,6 +208,12 @@ public class ByteArraySerializer implements IByteArraySerializable {
                         .collect(Collectors.toList());
                 field.set(bean, variable.getCount() == 1 ? int32s.get(0) : int32s);
                 break;
+            case INT64:
+                List<Long> int64s = IntStream.range(0, variable.getCount())
+                        .mapToObj(x -> buff.getInt64(variable.getByteOffset() + x * variable.getType().getByteLength()))
+                        .collect(Collectors.toList());
+                field.set(bean, variable.getCount() == 1 ? int64s.get(0) : int64s);
+                break;
             case FLOAT32:
                 List<Float> float32s = IntStream.range(0, variable.getCount())
                         .mapToObj(x -> buff.getFloat32(variable.getByteOffset() + x * variable.getType().getByteLength()))
@@ -221,14 +231,15 @@ public class ByteArraySerializer implements IByteArraySerializable {
                 break;
             default:
                 // 提取数据的时候无法识别数据类型
-                throw new ByteArrayParseException("The data type is not recognized when extracting the data");
+                throw new ByteArrayParseException("The data type can not be recognized when extracting the data");
         }
     }
 
     /**
-     * 校验字节数组注解的参数
+     * Check byte array variable.
+     * (校验字节数组注解的参数)
      *
-     * @param variable 参数
+     * @param variable variable
      */
     private void checkByteArrayVariable(ByteArrayParameter variable) {
         if (variable.getByteOffset() < 0) {
@@ -246,12 +257,13 @@ public class ByteArraySerializer implements IByteArraySerializable {
     }
 
     /**
-     * 填充一个数据
+     * Fill with one data.
+     * (填充一个数据)
      *
-     * @param variable 字节数组注解对象
-     * @param data     数据对象
-     * @param buff     字节缓存
-     * @param index    索引，第几个
+     * @param variable annotation of byte array variable
+     * @param data     data object
+     * @param buff     write byte buffer
+     * @param index    target index
      */
     private void fillOneData(ByteArrayVariable variable, Object data, ByteWriteBuff buff, int index) {
         switch (variable.type()) {
@@ -276,6 +288,9 @@ public class ByteArraySerializer implements IByteArraySerializable {
             case INT32:
                 buff.putInteger((Integer) data, variable.byteOffset() + index * variable.type().getByteLength(), variable.littleEndian(), variable.format());
                 break;
+            case INT64:
+                buff.putLong((Long) data, variable.byteOffset() + index * variable.type().getByteLength(), variable.littleEndian(), variable.format());
+                break;
             case FLOAT32:
                 buff.putFloat((Float) data, variable.byteOffset() + index * variable.type().getByteLength(), variable.littleEndian(), variable.format());
                 break;
@@ -287,16 +302,17 @@ public class ByteArraySerializer implements IByteArraySerializable {
                 break;
             default:
                 // 填充数据的时候无法识别数据类型
-                throw new ByteArrayParseException("The data type is not recognized when populating the data");
+                throw new ByteArrayParseException("The data type can not be recognized when populating the data");
         }
     }
 
     /**
-     * 填充多个数据，必须是list的数据
+     * Fill with list data.
+     * (填充多个数据，必须是list的数据)
      *
-     * @param variable 字节数组注解对象
-     * @param data     数据对象
-     * @param buff     字节缓存
+     * @param variable annotation of byte array variable
+     * @param data     data object
+     * @param buff     write byte buffer
      */
     private void fillListData(ByteArrayVariable variable, Object data, ByteWriteBuff buff) {
         if (variable.type() == STRING) {

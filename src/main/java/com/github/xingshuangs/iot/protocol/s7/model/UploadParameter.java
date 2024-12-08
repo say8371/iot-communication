@@ -30,21 +30,26 @@ import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.s7.enums.EFunctionCode;
 import com.github.xingshuangs.iot.utils.BooleanUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Upload parameter.
  * 上传参数
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class UploadParameter extends UploadAckParameter {
 
     /**
+     * Unknown bytes.
      * 未知字节，2个字节
      */
     protected byte[] errorCode = new byte[]{0x00, 0x00};
 
     /**
+     * Download id.
      * 下载的Id，4个字节（没用）
      */
     protected long id = 0x00000000;
@@ -69,9 +74,9 @@ public class UploadParameter extends UploadAckParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return UploadParameter
      */
     public static UploadParameter fromBytes(final byte[] data) {
@@ -79,10 +84,10 @@ public class UploadParameter extends UploadAckParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return UploadParameter
      */
     public static UploadParameter fromBytes(final byte[] data, final int offset) {
@@ -101,9 +106,10 @@ public class UploadParameter extends UploadAckParameter {
     }
 
     /**
+     * Create upload parameter.
      * 创建上传参数
      *
-     * @param uploadId 上传Id
+     * @param uploadId upload Id
      * @return UploadParameter
      */
     public static UploadParameter createDefault(long uploadId) {

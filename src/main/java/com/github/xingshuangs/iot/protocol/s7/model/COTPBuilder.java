@@ -41,9 +41,9 @@ public class COTPBuilder {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return COTP
      */
     public static COTP fromBytes(final byte[] data) {

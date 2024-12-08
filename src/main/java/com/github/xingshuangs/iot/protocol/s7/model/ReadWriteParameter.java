@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Read and write parameter.
  * 读写参数
  *
  * @author xingshuang
@@ -48,6 +49,7 @@ import java.util.List;
 public class ReadWriteParameter extends Parameter implements IObjectByteArray {
 
     /**
+     * Item count.
      * Request Item结构的数量 <br>
      * 字节大小：1 <br>
      * 字节序数：1
@@ -55,14 +57,16 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     private int itemCount = 0x00;
 
     /**
-     * 可重复的请求项
+     * Request items.
+     * (可重复的请求项)
      */
     private List<RequestBaseItem> requestItems = new ArrayList<>();
 
     /**
-     * 添加请求项
+     * Add item.
+     * (添加请求项)
      *
-     * @param item 项
+     * @param item request item
      */
     public void addItem(RequestBaseItem item) {
         this.requestItems.add(item);
@@ -70,9 +74,10 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 添加请求项列表
+     * Add item list.
+     * (添加请求项列表)
      *
-     * @param items 请求项列表
+     * @param items request item list
      */
     public void addItem(Collection<? extends RequestBaseItem> items) {
         this.requestItems.addAll(items);
@@ -97,9 +102,9 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return ReadWriteParameter
      */
     public static ReadWriteParameter fromBytes(final byte[] data) {
@@ -128,10 +133,11 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RequestBaseItem
      */
     public static RequestBaseItem parserItem(final byte[] data, final int offset) {
@@ -150,10 +156,11 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 创建默认的请求参数
+     * Create request parameter.
+     * (创建默认的请求参数)
      *
-     * @param functionCode 功能码
-     * @param requestItems 请求项
+     * @param functionCode function code
+     * @param requestItems request items
      * @return ReadWriteParameter
      */
     public static ReadWriteParameter createReqParameter(EFunctionCode functionCode, Collection<? extends RequestBaseItem> requestItems) {
@@ -164,10 +171,11 @@ public class ReadWriteParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 创建响应参数
+     * Create ack parameter
+     * (创建响应参数)
      *
-     * @param request 对应请求对象
-     * @return 读写参数
+     * @param request request parameter
+     * @return new read and write parameter
      */
     public static ReadWriteParameter createAckParameter(ReadWriteParameter request) {
         ReadWriteParameter parameter = new ReadWriteParameter();

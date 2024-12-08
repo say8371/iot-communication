@@ -28,33 +28,38 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Req header of 4E.
  * 请求头
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McHeader4EReq extends McHeader3EReq {
 
     /**
-     * 序列号，2字节
+     * Serial number, 2-bytes.
+     * (序列号，2字节)
      */
     protected int serialNumber = 0;
 
     /**
-     * 固定值编号，2字节
+     * Fixed number, 2-bytes.
+     * (固定值编号，2字节)
      */
     protected int fixedNumber = 0;
 
     public McHeader4EReq() {
     }
 
-    public McHeader4EReq( int timer) {
+    public McHeader4EReq(int timer) {
         this(McFrame4E3EAccessRoute.createDefault(), timer);
     }
 
-    public McHeader4EReq( McAccessRoute accessRoute, int timer) {
+    public McHeader4EReq(McAccessRoute accessRoute, int timer) {
         this.frameType = EMcFrameType.FRAME_4E;
         this.subHeader = this.frameType.getReqSubHeader();
         this.accessRoute = accessRoute;

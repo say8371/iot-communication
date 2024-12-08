@@ -29,22 +29,27 @@ import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Ack header of 4E.
  * 响应头
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McHeader4EAck extends McHeader3EAck {
 
     /**
-     * 序列号，2字节
+     * Serial number, 2-bytes.
+     * (序列号，2字节)
      */
     protected int serialNumber = 0;
 
     /**
-     * 固定值编号，2字节
+     * Fixed number, 2-bytes.
+     * (固定值编号，2字节)
      */
     protected int fixedNumber = 0;
 
@@ -71,9 +76,10 @@ public class McHeader4EAck extends McHeader3EAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data      字节数组数据
+     * @param data byte array
      * @return McHeaderAck
      */
     public static McHeader4EAck fromBytes(final byte[] data) {
@@ -81,10 +87,11 @@ public class McHeader4EAck extends McHeader3EAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data      字节数组数据
-     * @param offset    偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return McHeaderAck
      */
     public static McHeader4EAck fromBytes(final byte[] data, final int offset) {

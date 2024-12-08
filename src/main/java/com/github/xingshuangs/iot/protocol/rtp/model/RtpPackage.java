@@ -31,7 +31,8 @@ import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import lombok.Data;
 
 /**
- * RTP数据包
+ * Rtp package class.
+ * (RTP数据包)
  *
  * @author xingshuang
  */
@@ -39,17 +40,20 @@ import lombok.Data;
 public class RtpPackage implements IObjectByteArray {
 
     /**
-     * 头
+     * Header.
+     * (头)
      */
     private RtpHeader header;
 
     /**
-     * 负载
+     * Payload.
+     * (负载)
      */
     private byte[] payload;
 
     /**
-     * 需要忽略的长度
+     * Ignore length.
+     * (需要忽略的长度)
      */
     private int ignoreLength;
 
@@ -67,9 +71,9 @@ public class RtpPackage implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static RtpPackage fromBytes(final byte[] data) {
@@ -77,10 +81,10 @@ public class RtpPackage implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static RtpPackage fromBytes(final byte[] data, final int offset) {

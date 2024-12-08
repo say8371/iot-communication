@@ -28,32 +28,39 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Access route of 4E and 3E.
  * 4E，3E帧访问路径
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McFrame4E3EAccessRoute extends McAccessRoute {
 
     /**
-     * 网络编号，1个字节
+     * Network number.
+     * (网络编号，1个字节)
      */
     private int networkNumber = 0x00;
 
     /**
-     * 可编程控制器编号，1个字节
+     * PC number.
+     * (可编程控制器编号，1个字节)
      */
     private int pcNumber = 0xFF;
 
     /**
-     * 请求目标模块I/O编号
+     * Request destination module io number.
+     * (请求目标模块I/O编号)
      */
     private int requestDestModuleIoNumber = 0x03FF;
 
     /**
-     * 请求目标模块站号，1个字节
+     * Request destination module station number.
+     * (请求目标模块站号，1个字节)
      */
     private int requestDestModuleStationNumber = 0x00;
 
@@ -92,9 +99,10 @@ public class McFrame4E3EAccessRoute extends McAccessRoute {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return Mc4E3EFrameAccessRoute
      */
     public static McFrame4E3EAccessRoute fromBytes(final byte[] data) {
@@ -102,14 +110,15 @@ public class McFrame4E3EAccessRoute extends McAccessRoute {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return Mc4E3EFrameAccessRoute
      */
     public static McFrame4E3EAccessRoute fromBytes(final byte[] data, final int offset) {
-        ByteReadBuff buff = new ByteReadBuff(data, offset,true);
+        ByteReadBuff buff = new ByteReadBuff(data, offset, true);
         McFrame4E3EAccessRoute res = new McFrame4E3EAccessRoute();
         res.networkNumber = buff.getByteToInt();
         res.pcNumber = buff.getByteToInt();

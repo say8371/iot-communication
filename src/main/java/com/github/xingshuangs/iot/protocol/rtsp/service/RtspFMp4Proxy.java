@@ -31,6 +31,7 @@ import com.github.xingshuangs.iot.exceptions.RtspCommException;
 import com.github.xingshuangs.iot.protocol.mp4.model.*;
 import com.github.xingshuangs.iot.protocol.rtp.enums.EFrameType;
 import com.github.xingshuangs.iot.protocol.rtp.enums.EH264NaluType;
+import com.github.xingshuangs.iot.protocol.rtp.enums.EH264SliceType;
 import com.github.xingshuangs.iot.protocol.rtp.model.frame.H264VideoFrame;
 import com.github.xingshuangs.iot.protocol.rtp.model.payload.SeqParameterSet;
 import com.github.xingshuangs.iot.protocol.rtsp.model.sdp.RtspTrackInfo;
@@ -54,77 +55,79 @@ public class RtspFMp4Proxy {
     private final Object objLock = new Object();
 
     /**
-     * RTSP客户端
+     * RTSP client.
      */
     private final RtspClient client;
 
     /**
-     * 轨道信息
+     * Track info.
+     * (轨道信息)
      */
     private RtspTrackInfo trackInfo;
 
     /**
-     * 接收帧数据的序列号
+     * Sequence number of Fmp4.
+     * (接收帧数据的序列号)
      */
     private long sequenceNumber = 1;
 
     /**
-     * 数据缓存
+     * Fmp4 data buffer.
+     * (数据缓存)
      */
     private final ConcurrentLinkedQueue<IObjectByteArray> buffers = new ConcurrentLinkedQueue<>();
 
     /**
-     * FMp4数据事件
+     * Fmp4 data handle.
+     * (FMp4数据事件)
      */
     private Consumer<byte[]> fmp4DataHandle;
 
     /**
-     * codec的处理事件
+     * Codec data handle.
+     * (codec的处理事件)
      */
     private Consumer<String> codecHandle;
 
     /**
-     * 销毁的处理事件
+     * Destroy handle.
+     * (销毁的处理事件)
      */
     private Runnable destroyHandle;
 
     /**
-     * 是否终止
+     * Is thread terminal.
+     * (是否终止)
      */
     private volatile boolean terminal = false;
 
     /**
+     * Mp4 header.
      * MP4的头
      */
     private Mp4Header mp4Header;
 
     /**
-     * 轨道信息
+     * Mp4 track info.
+     * (轨道信息)
      */
     private Mp4TrackInfo mp4TrackInfo;
 
     /**
-     * 是否异步步发送
+     * Is send async.
+     * (是否异步步发送)
      */
     private boolean asyncSend = false;
 
     /**
-     * 上一次的H264的视频帧
-     */
-    private H264VideoFrame lastFrame;
-
-    /**
-     * 缓存视频帧数据，主要用于重新排序
-     */
-    private final List<H264VideoFrame> gop = new ArrayList<>();
-
-    /**
-     * 异步执行的对象
+     * Completable future.
+     * (异步执行的对象)
      */
     private CompletableFuture<Void> future;
 
     /**
-     * 线程池执行服务，单线程
+     * Executor service, single thread.
+     * (线程池执行服务，单线程)
      */
     private ExecutorService executorService;
 
@@ -171,9 +174,10 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 处理SPS，只处理一次
+     * SPS handle, do only once.
+     * (处理SPS，只处理一次)
      *
-     * @param frame 帧数据
+     * @param frame video frame
      */
     private void handleSPS(H264VideoFrame frame) {
         if (this.trackInfo != null && this.trackInfo.getSps() != null) {
@@ -195,16 +199,13 @@ public class RtspFMp4Proxy {
         this.trackInfo.setCodec(codec);
         this.trackInfo.setWidth(sps.getWidth());
         this.trackInfo.setHeight(sps.getHeight());
-
-        if (this.codecHandle != null) {
-            this.codecHandle.accept(codec);
-        }
     }
 
     /**
-     * 处理PPS，只处理一次
+     * PPS handle, do only once.
+     * (处理PPS，只处理一次)
      *
-     * @param frame 帧数据
+     * @param frame video frame
      */
     private void handlePPS(H264VideoFrame frame) {
         if (this.trackInfo != null && this.trackInfo.getPps() != null) {
@@ -216,22 +217,31 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 处理Mp4，只处理一次
+     * Mp4 header handle, do only once.
+     * (处理Mp4，只处理一次)
      */
     private void handleMp4Header() {
         if (this.mp4Header != null) {
             return;
         }
-        this.mp4TrackInfo = this.toMp4TrackInfo(this.client.getTrackInfo());
+        if (this.trackInfo == null) {
+            // 处理trackInfo
+            this.trackInfo = this.client.getTrackInfo();
+        }
+        this.mp4TrackInfo = this.toMp4TrackInfo(this.trackInfo);
+        if (this.codecHandle != null) {
+            this.codecHandle.accept(this.mp4TrackInfo.getCodec());
+        }
         log.debug(this.mp4TrackInfo.toString());
         this.mp4Header = new Mp4Header(mp4TrackInfo);
         this.addFMp4Data(mp4Header);
     }
 
     /**
-     * 帧处理事件
+     * Frame handle.
+     * (帧处理事件)
      *
-     * @param frame 数据帧
+     * @param frame video frame
      */
     private void frameHandle(H264VideoFrame frame) {
         if (frame.getFrameType() == EFrameType.AUDIO) {
@@ -249,59 +259,56 @@ public class RtspFMp4Proxy {
         }
         // 处理map4的header，只处理1次
         this.handleMp4Header();
+        this.doVideoFrameHandle(frame);
+    }
 
-        // 这里的作用是缓存10个帧数据，重新排序，因为可能收到的帧时间戳不是按时间顺序排列
-        this.gop.add(frame);
-        if (this.gop.size() < 10) {
-            return;
+    /**
+     * Do video frame handle.
+     * (执行处理)
+     *
+     * @param videoFrame video frame
+     */
+    private void doVideoFrameHandle(H264VideoFrame videoFrame) {
+        if (videoFrame.getNaluType() == EH264NaluType.IDR_SLICE
+                && !this.mp4TrackInfo.getSampleData().isEmpty()) {
+            this.addSampleData();
+        } else if (this.mp4TrackInfo.getSampleData().size() >= 5 && videoFrame.getSliceType() == EH264SliceType.P) {
+            this.addSampleData();
         }
-        this.gop.sort((a, b) -> (int) (a.getTimestamp() - b.getTimestamp()));
-        H264VideoFrame videoFrame = this.gop.remove(0);
-
-        if (this.lastFrame == null) {
-            this.lastFrame = videoFrame;
-        }
-        if (this.lastFrame.getTimestamp() > videoFrame.getTimestamp()) {
-            // 出现一帧数据时间戳小于之前的一帧的时间戳
-            log.warn("The timestamp of a frame is smaller than the timestamp of the previous frame");
-        }
-        this.lastFrame = videoFrame;
 
         Mp4SampleData sampleData = new Mp4SampleData();
         sampleData.setData(videoFrame.getFrameSegment());
-        sampleData.setTimestamp(videoFrame.getTimestamp());
+        sampleData.setDts(videoFrame.getDts());
         sampleData.getFlags().setDependedOn(videoFrame.getNaluType() == EH264NaluType.IDR_SLICE ? 2 : 1);
         sampleData.getFlags().setIsNonSync(videoFrame.getNaluType() == EH264NaluType.IDR_SLICE ? 0 : 1);
-
-        if (videoFrame.getNaluType() == EH264NaluType.IDR_SLICE) {
-            // 当前是IDR帧，发送并清空之前的数据，然后发送IDR帧
-            if (!this.mp4TrackInfo.getSampleData().isEmpty()) {
-                this.addSampleData();
-            }
-            this.mp4TrackInfo.getSampleData().add(sampleData);
-            this.addSampleData();
-        } else {
-            // 当前不是IDR帧，等数据量足够的时候再发送
-            this.mp4TrackInfo.getSampleData().add(sampleData);
-            if (this.mp4TrackInfo.getSampleData().size() >= 5) {
-                this.addSampleData();
-            }
-        }
+        sampleData.setDuration(videoFrame.getDuration());
+        sampleData.setCts((int) (videoFrame.getPts() - videoFrame.getDts()));
+        this.mp4TrackInfo.getSampleData().add(sampleData);
     }
 
     private void addSampleData() {
+        if (this.mp4TrackInfo.getSampleData().isEmpty()) {
+            return;
+        }
+        // chrome workaround, mark first sample as being a Random Access Point to avoid sourcebuffer append issue
+        // https://code.google.com/p/chromium/issues/detail?id=229412
         Mp4SampleData first = this.mp4TrackInfo.getSampleData().get(0);
-        this.addFMp4Data(new Mp4MoofBox(this.sequenceNumber, first.getTimestamp(), this.mp4TrackInfo));
+        first.getFlags().setDependedOn(2);
+        first.getFlags().setIsNonSync(0);
+
+        this.addFMp4Data(new Mp4MoofBox(this.sequenceNumber, first.getDts(), this.mp4TrackInfo));
         this.addFMp4Data(new Mp4MdatBox(this.mp4TrackInfo.totalSampleData()));
+
         // 更新mp4TrackInfo，用新的数据副本
         this.mp4TrackInfo = this.toMp4TrackInfo(this.trackInfo);
         this.sequenceNumber++;
     }
 
     /**
-     * 数据转换，包装成Mp4需要的轨道信息
+     * Transfer to Mp4 track info.
+     * (数据转换，包装成Mp4需要的轨道信息)
      *
-     * @param track 轨道信息
+     * @param track track info
      * @return Mp4TrackInfo
      */
     private Mp4TrackInfo toMp4TrackInfo(RtspTrackInfo track) {
@@ -319,9 +326,10 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 添加FMp4数据
+     * Add fmp4 data.
+     * (添加FMp4数据)
      *
-     * @param iObjectByteArray 数据
+     * @param iObjectByteArray data
      */
     private void addFMp4Data(IObjectByteArray iObjectByteArray) {
         if (this.asyncSend) {
@@ -337,7 +345,8 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 事件执行
+     * Execute handle for sending data.
+     * (事件执行)
      */
     private void executeHandle() {
         // 开启代理服务端发送FMp4字节数据的异步线程
@@ -371,9 +380,10 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 开始
+     * Start
+     * (开始)
      *
-     * @return 异步结果
+     * @return result
      */
     public CompletableFuture<Void> start() {
         // 开启FMp4代理服务端，模式[{}]，地址[{}]
@@ -382,7 +392,7 @@ public class RtspFMp4Proxy {
     }
 
     /**
-     * 结束
+     * Stop
      */
     public void stop() {
         if (this.executorService != null) {

@@ -26,21 +26,26 @@ package com.github.xingshuangs.iot.protocol.rtsp.model.base;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Range npt.
  * 范围
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class RtspRangeNpt extends RtspRange {
 
     /**
+     * Start time.
      * 起始时间
      */
     private String startTime;
 
     /**
+     * End time.
      * 结束时间
      */
     private String endTime;

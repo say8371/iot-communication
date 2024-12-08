@@ -29,6 +29,7 @@ import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.rtcp.enums.ERtcpPackageType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * bye
@@ -47,10 +48,12 @@ import lombok.Data;
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public final class RtcpBye extends RtcpBasePackage {
 
     /**
-     * 同步源（SSRC of sender）：32比特，SR包发送者的同步源标识符。与对应RTP包中的SSRC一样。
+     * Source id.
+     * (同步源（SSRC of sender）：32比特，SR包发送者的同步源标识符。与对应RTP包中的SSRC一样。)
      */
     private long sourceId;
 
@@ -81,9 +84,9 @@ public final class RtcpBye extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static RtcpBye fromBytes(final byte[] data) {
@@ -91,10 +94,10 @@ public final class RtcpBye extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static RtcpBye fromBytes(final byte[] data, final int offset) {

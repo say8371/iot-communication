@@ -39,10 +39,10 @@ public class ParameterBuilder {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data        字节数组数据
-     * @param messageType 消息类型
+     * @param data        byte array
+     * @param messageType message type
      * @return Parameter
      */
     public static Parameter fromBytes(final byte[] data, EMessageType messageType) {

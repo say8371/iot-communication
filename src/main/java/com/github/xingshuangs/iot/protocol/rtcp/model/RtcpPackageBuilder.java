@@ -32,7 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 数据包构建器
+ * Data package builder.
+ * (数据包构建器)
  *
  * @author xingshuang
  */
@@ -59,6 +60,9 @@ public class RtcpPackageBuilder {
 
     public static RtcpBasePackage parsePackage(final byte[] data, final int offset) {
         ERtcpPackageType type = ERtcpPackageType.from(data[1 + offset]);
+        if (type == null) {
+            throw new RtcpCommException("unrecognized type, byte = " + data[1 + offset]);
+        }
         switch (type) {
             case RR:
                 return RtcpReceiverReport.fromBytes(data, offset);

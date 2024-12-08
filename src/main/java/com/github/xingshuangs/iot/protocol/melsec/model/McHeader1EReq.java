@@ -28,13 +28,16 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 请求头
+ * Req header of 1E.
+ * (请求头)
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McHeader1EReq extends McHeaderReq {
 
     public McHeader1EReq() {

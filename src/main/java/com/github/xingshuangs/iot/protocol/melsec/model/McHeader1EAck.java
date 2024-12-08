@@ -29,13 +29,16 @@ import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 响应头
+ * Ack header of 1E.
+ * (响应头)
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McHeader1EAck extends McHeaderAck {
 
     public McHeader1EAck() {
@@ -56,9 +59,10 @@ public class McHeader1EAck extends McHeaderAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data      字节数组数据
+     * @param data byte array
      * @return McHeaderAck
      */
     public static McHeader1EAck fromBytes(final byte[] data) {
@@ -66,10 +70,11 @@ public class McHeader1EAck extends McHeaderAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data      字节数组数据
-     * @param offset    偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return McHeaderAck
      */
     public static McHeader1EAck fromBytes(final byte[] data, final int offset) {

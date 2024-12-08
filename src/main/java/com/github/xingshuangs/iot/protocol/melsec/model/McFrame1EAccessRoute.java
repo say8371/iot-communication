@@ -28,17 +28,21 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 1E帧访问路径
+ * Access route of 1E frame
+ * (1E帧访问路径)
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McFrame1EAccessRoute extends McAccessRoute {
 
     /**
-     * 可编程控制器编号，1个字节
+     * Pc number, 1-byte.
+     * (可编程控制器编号，1个字节)
      */
     private int pcNumber = 0xFF;
 
@@ -68,9 +72,10 @@ public class McFrame1EAccessRoute extends McAccessRoute {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return Mc4E3EFrameAccessRoute
      */
     public static McFrame1EAccessRoute fromBytes(final byte[] data) {
@@ -78,14 +83,15 @@ public class McFrame1EAccessRoute extends McAccessRoute {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return Mc4E3EFrameAccessRoute
      */
     public static McFrame1EAccessRoute fromBytes(final byte[] data, final int offset) {
-        ByteReadBuff buff = new ByteReadBuff(data, offset,true);
+        ByteReadBuff buff = new ByteReadBuff(data, offset, true);
         McFrame1EAccessRoute res = new McFrame1EAccessRoute();
         res.pcNumber = buff.getByteToInt();
         return res;

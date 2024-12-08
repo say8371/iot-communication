@@ -80,9 +80,9 @@ public class H264NaluMtap24Single extends H264NaluSingle {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static H264NaluMtap24Single fromBytes(final byte[] data) {
@@ -90,10 +90,10 @@ public class H264NaluMtap24Single extends H264NaluSingle {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static H264NaluMtap24Single fromBytes(final byte[] data, final int offset) {
@@ -105,7 +105,7 @@ public class H264NaluMtap24Single extends H264NaluSingle {
         H264NaluMtap24Single res = new H264NaluMtap24Single();
         res.size = buff.getUInt16();
         res.dond = buff.getByteToInt();
-        res.tsOffset = IntegerUtil.toInt32In3Bytes(buff.getBytes(3),0);
+        res.tsOffset = IntegerUtil.toInt32In3Bytes(buff.getBytes(3), 0);
         index += 6;
 
         res.header = H264NaluHeader.fromBytes(data, index);

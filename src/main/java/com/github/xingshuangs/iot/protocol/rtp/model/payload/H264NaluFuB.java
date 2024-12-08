@@ -29,6 +29,7 @@ import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.utils.ShortUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Nalu的FuB
@@ -47,20 +48,22 @@ import lombok.Data;
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class H264NaluFuB extends H264NaluBase {
 
     /**
-     * Fu的头
+     * Fu header.
      */
     private H264NaluFuHeader fuHeader = new H264NaluFuHeader();
 
     /**
+     * Decoding order number.
      * 解码顺序编号
      */
     private int decodingOrderNumber;
 
     /**
-     * 负载
+     * Payload.
      */
     protected byte[] payload = new byte[0];
 
@@ -80,9 +83,9 @@ public class H264NaluFuB extends H264NaluBase {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static H264NaluFuB fromBytes(final byte[] data) {
@@ -90,10 +93,10 @@ public class H264NaluFuB extends H264NaluBase {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static H264NaluFuB fromBytes(final byte[] data, final int offset) {

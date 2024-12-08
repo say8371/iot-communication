@@ -30,20 +30,24 @@ import com.github.xingshuangs.iot.protocol.melsec.enums.EMcCommand;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcSeries;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Device access request data, random write in bit.
  * 软元件访问随机写请求数据，位单位
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McWriteDeviceRandomInBitReqData extends McReqData {
 
     /**
-     * 软元件设备内容，位访问地址列表
+     * Bit content list.
+     * (软元件设备内容，位访问地址列表)
      */
     private List<McDeviceContent> bitContents;
 

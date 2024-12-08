@@ -34,6 +34,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Start upload parameter.
  * 开始上传参数
  *
  * @author xingshuang
@@ -58,9 +59,9 @@ public class StartUploadParameter extends DownloadParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return StartUploadParameter
      */
     public static StartUploadParameter fromBytes(final byte[] data) {
@@ -68,10 +69,10 @@ public class StartUploadParameter extends DownloadParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return StartUploadParameter
      */
     public static StartUploadParameter fromBytes(final byte[] data, final int offset) {

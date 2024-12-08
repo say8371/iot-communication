@@ -1,6 +1,6 @@
 # IOT-COMMUNICATION
 
-[![Maven-v1.5.2](https://img.shields.io/badge/Maven-v1.5.2-brightgreen)](https://mvnrepository.com/artifact/com.github.xingshuangs/iot-communication)
+[![Maven-v1.5.3](https://img.shields.io/badge/Maven-v1.5.3-brightgreen)](https://mvnrepository.com/artifact/com.github.xingshuangs/iot-communication)
 ![Language-java8](https://img.shields.io/badge/Language-java8-blue)
 ![Idea-2022.02.03](https://img.shields.io/badge/Idea-2022.02.03-lightgrey)
 ![CopyRight-Oscura](https://img.shields.io/badge/CopyRight-Oscura-yellow)
@@ -31,7 +31,7 @@
 <dependency>
     <groupId>com.github.xingshuangs</groupId>
     <artifactId>iot-communication</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
 </dependency>
 ```
 
@@ -73,7 +73,9 @@
 
 ## 赞助
 
-一杯奶茶足矣<br>
-**微信** (请备注上你的姓名)<br>
+一杯奶茶足矣，请备注上你的姓名<br>
+#### 1. [PayPal](https://www.paypal.com/paypalme/xingshuang)
+[![PayPal Sponsor button](https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/paypalme/xingshuang)
+#### 2. 微信
 ![微信](https://i.postimg.cc/brBG5vx8/image.png)
 

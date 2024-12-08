@@ -31,13 +31,16 @@ import com.github.xingshuangs.iot.protocol.s7.enums.ENckArea;
 import com.github.xingshuangs.iot.protocol.s7.enums.ENckModule;
 import com.github.xingshuangs.iot.protocol.s7.enums.ESyntaxID;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * NCK request item.
  * NCK请求项
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class RequestNckItem extends RequestBaseItem {
 
     public static final int BYTE_LENGTH = 10;
@@ -62,6 +65,7 @@ public class RequestNckItem extends RequestBaseItem {
     }
 
     /**
+     * NCK area.
      * NCK区域 <br>
      * 字节大小：1 <br>
      * 字节序数：3
@@ -69,6 +73,7 @@ public class RequestNckItem extends RequestBaseItem {
     private ENckArea area = ENckArea.N_NCK;
 
     /**
+     * unit number.
      * 通道编号 <br>
      * 字节大小：1 <br>
      * 字节序数：4
@@ -76,6 +81,7 @@ public class RequestNckItem extends RequestBaseItem {
     private int unit = 0x0000;
 
     /**
+     * Column number.
      * 列编号 <br>
      * 字节大小：2 <br>
      * 字节序数：5
@@ -83,6 +89,7 @@ public class RequestNckItem extends RequestBaseItem {
     private int columnNumber = 0x0000;
 
     /**
+     * Line number.
      * 行编号 <br>
      * 字节大小：2 <br>
      * 字节序数：7
@@ -90,6 +97,7 @@ public class RequestNckItem extends RequestBaseItem {
     private int lineNumber = 0x0000;
 
     /**
+     * Module name.
      * 模块名 <br>
      * 字节大小：1 <br>
      * 字节序数：8
@@ -97,6 +105,7 @@ public class RequestNckItem extends RequestBaseItem {
     private ENckModule module = ENckModule.S;
 
     /**
+     * Line count.
      * 行个数 <br>
      * 字节大小：1 <br>
      * 字节序数：9
@@ -125,6 +134,7 @@ public class RequestNckItem extends RequestBaseItem {
     }
 
     /**
+     * Copy.
      * 复制一个新对象
      *
      * @return requestItem
@@ -148,10 +158,10 @@ public class RequestNckItem extends RequestBaseItem {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RequestItem
      */
     public static RequestNckItem fromBytes(final byte[] data, final int offset) {

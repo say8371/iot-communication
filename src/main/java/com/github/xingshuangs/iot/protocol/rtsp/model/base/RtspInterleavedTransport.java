@@ -27,6 +27,7 @@ package com.github.xingshuangs.iot.protocol.rtsp.model.base;
 
 import com.github.xingshuangs.iot.exceptions.RtspCommException;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +40,17 @@ import java.util.Map;
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class RtspInterleavedTransport extends RtspTransport {
 
     /**
+     * interleaved
      * 交错编号1
      */
     private Integer interleaved1 = 0;
 
     /**
+     * interleaved
      * 交错编号2
      */
     private Integer interleaved2 = 1;

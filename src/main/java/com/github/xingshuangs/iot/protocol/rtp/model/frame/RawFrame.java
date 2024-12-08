@@ -28,29 +28,53 @@ package com.github.xingshuangs.iot.protocol.rtp.model.frame;
 import com.github.xingshuangs.iot.common.IObjectByteArray;
 import com.github.xingshuangs.iot.protocol.rtp.enums.EFrameType;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 帧的基础类
+ * Raw frame.
+ * (帧的基础类)
  *
  * @author xingshuang
  */
 @Getter
+@Setter
 public class RawFrame implements IObjectByteArray {
 
     /**
-     * 帧类别
+     * Frame type.
+     * (帧类别)
      */
     protected EFrameType frameType;
 
     /**
-     * 时间戳
+     * Timestamp.
+     * (时间戳)
      */
-    protected  long timestamp;
+    protected long timestamp;
 
     /**
-     * 帧内容
+     * Frame segment.
+     * (帧内容)
      */
     protected byte[] frameSegment = new byte[0];
+
+    /**
+     * Presentation Time Stamp
+     * (显示时间戳)
+     */
+    protected long pts;
+
+    /**
+     * Decoding Time Stamp
+     * (解码时间戳)
+     */
+    protected long dts;
+
+    /**
+     * sample duration, Sample Duration=DTSn+1 - DTSn
+     * (每个样本（例如一帧）从解码开始到下一个样本解码开始的时间间隔)
+     */
+    protected int duration = 3600;
 
     @Override
     public int byteArrayLength() {

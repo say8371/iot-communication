@@ -50,9 +50,9 @@ public class H264NaluStapSingle extends H264NaluSingle {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static H264NaluStapSingle fromBytes(final byte[] data) {
@@ -60,10 +60,10 @@ public class H264NaluStapSingle extends H264NaluSingle {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static H264NaluStapSingle fromBytes(final byte[] data, final int offset) {
@@ -78,7 +78,7 @@ public class H264NaluStapSingle extends H264NaluSingle {
         res.header = H264NaluHeader.fromBytes(data, index);
         index += res.header.byteArrayLength();
 
-        res.payload =  ByteReadBuff.newInstance(data, index).getBytes(res.size);
+        res.payload = ByteReadBuff.newInstance(data, index).getBytes(res.size - 1);
         return res;
     }
 }

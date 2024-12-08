@@ -27,17 +27,21 @@ package com.github.xingshuangs.iot.protocol.melsec.model;
 
 import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Ack data.
  * 协议体数据：响应数据
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McAckData extends McData {
 
     /**
-     * 数据内容
+     * Data content.
+     * (数据内容)
      */
     private byte[] data = new byte[0];
 
@@ -52,9 +56,10 @@ public class McAckData extends McData {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return McAckData
      */
     public static McAckData fromBytes(final byte[] data) {
@@ -62,10 +67,11 @@ public class McAckData extends McData {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return McAckData
      */
     public static McAckData fromBytes(final byte[] data, final int offset) {

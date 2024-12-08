@@ -36,6 +36,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Data item.
  * 返回数据
  *
  * @author xingshuang
@@ -45,6 +46,7 @@ import lombok.EqualsAndHashCode;
 public class DataItem extends ReturnItem implements IObjectByteArray {
 
     /**
+     * Data variable type.
      * 变量类型 <br>
      * 字节大小：1 <br>
      * 字节序数：1
@@ -52,6 +54,7 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     private EDataVariableType variableType = EDataVariableType.BYTE_WORD_DWORD;
 
     /**
+     * The data length is calculated by bit. If it is byte data, /8 or *8 operation is required to read it. If it is bit data, no additional operation is required.
      * 数据长度，按位进行计算的，如果是字节数据读取需要进行 /8 或 *8操作，如果是位数据，不需要任何额外操作 <br>
      * 字节大小：2 <br>
      * 字节序数：2-3
@@ -59,6 +62,7 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     private int count = 0x0000;
 
     /**
+     * Data content.
      * 数据内容
      */
     private byte[] data = new byte[0];
@@ -88,14 +92,15 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
                 buff.putShort(this.count);
                 break;
             default:
-                throw new S7CommException("Data type not recognized");
+                throw new S7CommException("Data type can not be recognized");
         }
         buff.putBytes(this.data);
         return buff.getData();
     }
 
     /**
-     * 复制一个新对象
+     * Copy
+     * (复制一个新对象)
      *
      * @return DataItem
      */
@@ -109,9 +114,9 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return DataItem
      */
     public static DataItem fromBytes(final byte[] data) {
@@ -133,7 +138,7 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
                 dataItem.count = buff.getUInt16();
                 break;
             default:
-                throw new S7CommException("Data type not recognized");
+                throw new S7CommException("Data type can not be recognized");
         }
         // 返回数据类型为null，那就是没有数据
         if (dataItem.variableType != EDataVariableType.NULL) {
@@ -143,20 +148,22 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     }
 
     /**
-     * 通过字节数据类型转换为DataItem数据
+     * Create data item by byte.
+     * (通过字节数据类型转换为DataItem数据)
      *
-     * @param data 字节数据
-     * @return DataItem数据
+     * @param data byte data
+     * @return DataItem
      */
     public static DataItem createReqByByte(byte data) {
         return createReqByByte(new byte[]{data});
     }
 
     /**
-     * 通过字节数组数据类型转换为DataItem数据
+     * Create data item by byte array.
+     * (通过字节数组数据类型转换为DataItem数据)
      *
-     * @param data 字节数组
-     * @return DataItem数据
+     * @param data byte array
+     * @return DataItem
      */
     public static DataItem createReqByByte(byte[] data) {
         if (data == null || data.length == 0) {
@@ -171,7 +178,8 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     }
 
     /**
-     * 通过boolean数据类型转换为DataItem数据
+     * Create data item by boolean.
+     * (通过boolean数据类型转换为DataItem数据)
      *
      * @param data boolean数据
      * @return DataItem数据
@@ -186,11 +194,12 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     }
 
     /**
-     * 通过字节数组+数据类型转换为DataItem数据
+     * Convert to DataItem data by byte array + data type
+     * (通过字节数组+数据类型转换为DataItem数据)
      *
-     * @param data             字节数组
-     * @param dataVariableType 数据类型
-     * @return 数据项目
+     * @param data             byte array
+     * @param dataVariableType data variable type
+     * @return DataItem
      */
     public static DataItem createReq(byte[] data, EDataVariableType dataVariableType) {
         DataItem dataItem = new DataItem();
@@ -202,11 +211,12 @@ public class DataItem extends ReturnItem implements IObjectByteArray {
     }
 
     /**
-     * 通过字节数组+数据类型转换为DataItem数据
+     * Convert to DataItem data by byte array + data type
+     * (通过字节数组+数据类型转换为DataItem数据)
      *
-     * @param data             字节数组
-     * @param dataVariableType 数据类型
-     * @return 数据项目
+     * @param data             byte array
+     * @param dataVariableType data variable type
+     * @return DataItem
      */
     public static DataItem createAckBy(byte[] data, EDataVariableType dataVariableType) {
         DataItem dataItem = new DataItem();

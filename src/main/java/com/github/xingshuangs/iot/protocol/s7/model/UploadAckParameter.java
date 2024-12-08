@@ -34,6 +34,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Upload ack parameter.
  * 上传响应参数
  *
  * @author xingshuang
@@ -43,6 +44,7 @@ import lombok.EqualsAndHashCode;
 public class UploadAckParameter extends Parameter implements IObjectByteArray {
 
     /**
+     * More data following.
      * 后续是否还有更多数据
      */
     protected boolean moreDataFollowing = false;
@@ -71,9 +73,9 @@ public class UploadAckParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return DownloadAckParameter
      */
     public static UploadAckParameter fromBytes(final byte[] data) {
@@ -81,10 +83,10 @@ public class UploadAckParameter extends Parameter implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return DownloadAckParameter
      */
     public static UploadAckParameter fromBytes(final byte[] data, final int offset) {

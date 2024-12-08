@@ -22,28 +22,66 @@
  * SOFTWARE.
  */
 
-package com.github.xingshuangs.iot.protocol.rtsp.model;
+package com.github.xingshuangs.iot.protocol.rtp.enums;
 
 
-import com.github.xingshuangs.iot.protocol.rtsp.authentication.AbstractAuthenticator;
-import com.github.xingshuangs.iot.protocol.rtsp.enums.ERtspMethod;
-import lombok.Getter;
-
-import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Play request
+ * H264 slice type.
+ * H264的Slice类型
  *
  * @author xingshuang
  */
-@Getter
-public final class RtspPauseRequest extends RtspMessageRequest {
+public enum EH264SliceType {
 
-    public RtspPauseRequest(URI uri, String session) {
-        this(uri, session, null);
+    /**
+     * P帧
+     */
+    P(0),
+
+    /**
+     * B帧
+     */
+    B(1),
+
+    /**
+     * I帧
+     */
+    I(2),
+
+    /**
+     * SP帧
+     */
+    SP(3),
+
+    /**
+     * SI帧
+     */
+    SI(4),
+
+    ;
+
+    private static Map<Integer, EH264SliceType> map;
+
+    public static EH264SliceType from(int data) {
+        if (map == null) {
+            map = new HashMap<>();
+            for (EH264SliceType item : EH264SliceType.values()) {
+                map.put(item.code, item);
+            }
+        }
+        return map.get(data);
     }
 
-    public RtspPauseRequest(URI uri, String session, AbstractAuthenticator authenticator) {
-        super(ERtspMethod.PAUSE, uri, session, authenticator);
+    private final int code;
+
+    EH264SliceType(int code) {
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
     }
 }

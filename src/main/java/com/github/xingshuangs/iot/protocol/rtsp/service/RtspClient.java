@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Rtsp客户端
+ * Rtsp client.
  *
  * @author xingshuang
  */
@@ -47,7 +47,7 @@ public class RtspClient extends RtspNetwork {
     private volatile boolean alive;
 
     /**
-     * 线程池执行服务，单线程
+     * Executor service, single thread.
      */
     private ExecutorService executorService;
 
@@ -56,11 +56,11 @@ public class RtspClient extends RtspNetwork {
     }
 
     public RtspClient(URI uri, ERtspTransportProtocol transportProtocol) {
-        super(uri, transportProtocol);
+        this(uri, null, transportProtocol);
     }
 
     public RtspClient(URI uri, DigestAuthenticator authenticator) {
-        super(uri, authenticator);
+        this(uri, authenticator, ERtspTransportProtocol.TCP);
     }
 
     public RtspClient(URI uri, DigestAuthenticator authenticator, ERtspTransportProtocol transportProtocol) {
@@ -69,9 +69,9 @@ public class RtspClient extends RtspNetwork {
     }
 
     /**
-     * 启动
+     * Start
      *
-     * @return 执行的future
+     * @return completable future
      */
     public CompletableFuture<Void> start() {
         log.info("Open RTSP connection, address [{}], communication mode [{}]", this.uri, this.transportProtocol);
@@ -110,7 +110,7 @@ public class RtspClient extends RtspNetwork {
     }
 
     /**
-     * 断开
+     * Stop
      */
     public void stop() {
         if (this.executorService != null) {

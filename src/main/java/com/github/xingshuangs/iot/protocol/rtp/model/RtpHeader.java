@@ -157,16 +157,19 @@ public class RtpHeader implements IObjectByteArray {
     private List<Long> csrcList = new ArrayList<>();
 
     /**
+     * Extension header id.
      * 扩展头Id，2个字节
      */
     private int extensionHeaderId;
 
     /**
+     * Extension header length.
      * 扩展头长度，2个字节
      */
     private int extensionHeaderLength;
 
     /**
+     * Extension header content.
      * 扩展头的内容
      */
     private byte[] extensionHeaderContent = new byte[0];
@@ -204,9 +207,9 @@ public class RtpHeader implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static RtpHeader fromBytes(final byte[] data) {
@@ -214,10 +217,10 @@ public class RtpHeader implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static RtpHeader fromBytes(final byte[] data, final int offset) {

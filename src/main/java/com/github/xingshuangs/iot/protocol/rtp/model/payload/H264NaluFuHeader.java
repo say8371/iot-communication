@@ -45,22 +45,28 @@ import lombok.Data;
 public class H264NaluFuHeader implements IObjectByteArray {
 
     /**
+     * When set to 1, the start bit indicates the start of the shard NAL unit.
+     * When the following FU load is not the beginning of the fragment NAL unit load, the start bit is set to 0.
      * 当设置成1,开始位指示分片NAL单元的开始。当跟随的FU荷载不是分片NAL单元荷载的开始，开始位设为0。
      */
     private boolean start;
 
     /**
+     * When set to 1, the end bit indicates the end of the shard NAL unit, that is,
+     * the last byte of the load is also the last byte of the shard NAL unit.
      * 当设置成1, 结束位指示分片NAL单元的结束，即, 荷载的最后字节也是分片NAL单元的最后一个字节。
      * 当跟随的 FU荷载不是分片NAL单元的最后分片,结束位设置为0。
      */
     private boolean end;
 
     /**
+     * Reserve.
      * 保留位必须设置为0，接收者必须忽略该位
      */
     private boolean reserve;
 
     /**
+     * Nalu type.
      * 表示 NALU 数据类型，该字段占 5 位，取值 0 ~ 31
      */
     private EH264NaluType type;
@@ -80,9 +86,9 @@ public class H264NaluFuHeader implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static H264NaluFuHeader fromBytes(final byte[] data) {
@@ -90,10 +96,10 @@ public class H264NaluFuHeader implements IObjectByteArray {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static H264NaluFuHeader fromBytes(final byte[] data, final int offset) {

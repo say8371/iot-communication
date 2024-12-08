@@ -29,21 +29,26 @@ import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
+ * Ack header of 3E.
  * 响应头
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McHeader3EAck extends McHeaderAck {
 
     /**
-     * 访问路径，存在多种访问路径
+     * Access route.
+     * (访问路径，存在多种访问路径)
      */
     protected McAccessRoute accessRoute;
 
     /**
+     * Data length.
      * 数据长度，2字节，响应数据长，存储从结束代码到响应数据(正常结束时)或出错信息(异常结束时)为止的数据长。
      */
     protected int dataLength = 0;
@@ -69,9 +74,10 @@ public class McHeader3EAck extends McHeaderAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return McHeaderAck
      */
     public static McHeader3EAck fromBytes(final byte[] data) {
@@ -79,10 +85,11 @@ public class McHeader3EAck extends McHeaderAck {
     }
 
     /**
-     * 解析字节数组数据
+     * Parses byte array and converts it to object.
+     * (解析字节数组数据)
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return McHeaderAck
      */
     public static McHeader3EAck fromBytes(final byte[] data, final int offset) {

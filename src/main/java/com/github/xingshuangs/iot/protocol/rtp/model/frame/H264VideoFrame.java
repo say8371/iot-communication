@@ -25,33 +25,52 @@
 package com.github.xingshuangs.iot.protocol.rtp.model.frame;
 
 
+import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import com.github.xingshuangs.iot.protocol.rtp.enums.EFrameType;
 import com.github.xingshuangs.iot.protocol.rtp.enums.EH264NaluType;
+import com.github.xingshuangs.iot.protocol.rtp.enums.EH264SliceType;
+import com.github.xingshuangs.iot.protocol.rtp.model.payload.ExpGolomb;
 import com.github.xingshuangs.iot.protocol.rtp.model.payload.H264NaluBuilder;
 import com.github.xingshuangs.iot.protocol.rtp.model.payload.H264NaluSingle;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 普通帧
+ * H264 video frame.
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class H264VideoFrame extends RawFrame {
 
     /**
-     * 起始分割符
+     * Start marker.
+     * (起始分割符)
      */
     public static final byte[] START_MARKER = new byte[]{0x00, 0x00, 0x00, 0x01};
 
     private final EH264NaluType naluType;
 
+    private EH264SliceType sliceType;
+
     public H264VideoFrame(EH264NaluType naluType, long timestamp, byte[] frameSegment) {
         this.frameType = EFrameType.VIDEO;
         this.naluType = naluType;
         this.timestamp = timestamp;
+        this.pts = timestamp;
+        this.dts = timestamp;
         this.frameSegment = frameSegment;
+        if (naluType == EH264NaluType.IDR_SLICE || naluType == EH264NaluType.NON_IDR_SLICE) {
+            ByteReadBuff buff = ByteReadBuff.newInstance(frameSegment);
+            buff.getByte();
+            // 从第二个字节开始，取2个字节
+            ExpGolomb expGolomb = new ExpGolomb(buff.getBytes());
+            expGolomb.readUE();
+            int type = expGolomb.readUE();
+            this.sliceType = EH264SliceType.from(type % 5);
+        }
     }
 
     @Override

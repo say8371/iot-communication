@@ -33,6 +33,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Start upload ack parameter.
  * 开始上传参数
  *
  * @author xingshuang
@@ -42,11 +43,13 @@ import lombok.EqualsAndHashCode;
 public class StartUploadAckParameter extends UploadParameter {
 
     /**
+     * Block length string length, that is, the length of the data since then.
      * 即自此之后的数据长度，1个字节
      */
     private int blockLengthStringLength = 7;
 
     /**
+     * Block length, full to end upload fast length.
      * 到尾完整上传快的长度（以字节为单位）、可以拆分为多个PDU，7个字节
      */
     private int blockLength = 0;
@@ -74,9 +77,9 @@ public class StartUploadAckParameter extends UploadParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return StartUploadAckParameter
      */
     public static StartUploadAckParameter fromBytes(final byte[] data) {
@@ -84,10 +87,10 @@ public class StartUploadAckParameter extends UploadParameter {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return StartUploadAckParameter
      */
     public static StartUploadAckParameter fromBytes(final byte[] data, final int offset) {

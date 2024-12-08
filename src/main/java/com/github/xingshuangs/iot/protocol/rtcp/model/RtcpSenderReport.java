@@ -28,6 +28,7 @@ package com.github.xingshuangs.iot.protocol.rtcp.model;
 import com.github.xingshuangs.iot.common.buff.ByteReadBuff;
 import com.github.xingshuangs.iot.common.buff.ByteWriteBuff;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,19 +74,23 @@ import java.util.List;
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public final class RtcpSenderReport extends RtcpBasePackage {
 
     /**
+     * Source id.
      * 同步源（SSRC of sender）：32比特，SR包发送者的同步源标识符。与对应RTP包中的SSRC一样。
      */
     private long sourceId;
 
     /**
+     * Sender info.
      * 发送者信息
      */
     private RtcpSenderInfo senderInfo;
 
     /**
+     * Report blocks.
      * 报告数据块
      */
     private List<RtcpReportBlock> reportBlocks = new ArrayList<>();
@@ -119,9 +124,9 @@ public final class RtcpSenderReport extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return RtcpHeader
      */
     public static RtcpSenderReport fromBytes(final byte[] data) {
@@ -129,10 +134,10 @@ public final class RtcpSenderReport extends RtcpBasePackage {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data   字节数组数据
-     * @param offset 偏移量
+     * @param data   byte array
+     * @param offset index offset
      * @return RtcpHeader
      */
     public static RtcpSenderReport fromBytes(final byte[] data, final int offset) {

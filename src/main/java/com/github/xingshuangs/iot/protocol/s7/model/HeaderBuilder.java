@@ -29,6 +29,7 @@ import com.github.xingshuangs.iot.exceptions.S7CommException;
 import com.github.xingshuangs.iot.protocol.s7.enums.EMessageType;
 
 /**
+ * Header builder.
  * Header构建器
  *
  * @author xingshuang
@@ -40,9 +41,9 @@ public class HeaderBuilder {
     }
 
     /**
-     * 字节数组数据解析
+     * Parses byte array and converts it to object.
      *
-     * @param data 字节数组数据
+     * @param data byte array
      * @return Header
      */
     public static Header fromBytes(final byte[] data) {
@@ -57,7 +58,7 @@ public class HeaderBuilder {
             case USER_DATA:
                 return null;
             default:
-                throw new S7CommException("Header message type not recognized");
+                throw new S7CommException("Header message type can not be recognized");
         }
     }
 }

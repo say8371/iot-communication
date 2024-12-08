@@ -31,25 +31,30 @@ import com.github.xingshuangs.iot.protocol.melsec.enums.EMcCommand;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcSeries;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Device access request data, batch write in word.
  * 软元件访问随机写请求数据，字单位
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McWriteDeviceRandomInWordReqData extends McReqData {
 
     /**
-     * 软元件设备内容，字访问地址列表
+     * Word content list.
+     * (软元件设备内容，字访问地址列表)
      */
     private List<McDeviceContent> wordContents;
 
     /**
-     * 软元件设备内容，双字访问地址列表
+     * Dword content list.
+     * (软元件设备内容，双字访问地址列表)
      */
     private List<McDeviceContent> dwordContents;
 

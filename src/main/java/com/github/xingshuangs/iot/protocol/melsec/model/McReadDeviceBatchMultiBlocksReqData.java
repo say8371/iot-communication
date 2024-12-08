@@ -31,25 +31,30 @@ import com.github.xingshuangs.iot.protocol.melsec.enums.EMcCommand;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcFrameType;
 import com.github.xingshuangs.iot.protocol.melsec.enums.EMcSeries;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 软元件访问多块读请求数据
+ * Device access request data, batch multi blocks.
+ * (软元件访问多块读请求数据)
  *
  * @author xingshuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class McReadDeviceBatchMultiBlocksReqData extends McReqData {
 
     /**
-     * 软元件设备地址，字访问地址列表
+     * Word address list.
+     * (软元件设备地址，字访问地址列表)
      */
     private List<McDeviceAddress> wordAddresses;
 
     /**
-     * 软元件设备地址，位访问地址列表
+     * Bit address list.
+     * (软元件设备地址，位访问地址列表)
      */
     private List<McDeviceAddress> bitAddresses;
 
